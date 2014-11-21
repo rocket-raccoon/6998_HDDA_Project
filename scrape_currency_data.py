@@ -83,7 +83,7 @@ if __name__ == "__main__":
     scraper = currency_scraper()
     try:
         scraper.initialize_browser()
-        scraper.set_date_intervals("2013-01-01", "2014-01-01", 20)
+        scraper.set_date_intervals("2014-09-01", "2014-09-20", 20)
         scraper.scrape_currency_data()
     except:
         raise "Scraper failed to complete"

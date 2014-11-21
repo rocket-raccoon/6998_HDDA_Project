@@ -6,7 +6,7 @@ function [L] = create_bigL(theta, n)
         B = theta(i,2);
         lb = n*(i-1) + 1;
         rb = n*i;
-        L(lb:rb, lb:rb) = create_Li(a, B, n);
+        L(lb:rb, lb:rb) = create_littleL(a, B, n);
     end
 end
 
