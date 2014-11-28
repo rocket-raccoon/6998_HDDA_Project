@@ -12,26 +12,20 @@ function [ omega, theta ] = run_algorithm(file_path, lambda)
     while(1)
         %Create Big L
         bigL = create_bigL(theta,n);
-        size(bigL)
         %Create Big M
         littleM = create_littleM(n);
         bigM = create_bigM(littleM, p);
-        size(bigM)
         %Create Psi
         X = inv(bigL)*bigM;
-        size(X)
         Yhat = (inv(bigL)*vec(Y*omega));
-        size(Yhat)
         psi = inv(X'*X)*X'*Yhat;
-        size(psi)
         %Update omega
         A = inv(bigL)*kron(eye(p),Y);
         b = inv(bigL)*bigM*psi;
         omega_new = LassoBlockCoordinate(A, b, lambda);
-        omega_new
-        break;
         %Update theta
-        theta = rand(p,2);
+        eta = .1;
+        theta = update_theta(theta, bigL, bigM, Y, omega, eta);
         %Get new objective function value
         obj_val = norm(Y/bigL*omega_new-bigM/bigL*psi,'fro')+lambda*norm(omega_new,1);
         %Check for convergence
@@ -42,4 +36,7 @@ function [ omega, theta ] = run_algorithm(file_path, lambda)
         end
     end
 end
+
+
+
 
