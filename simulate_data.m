@@ -1,6 +1,6 @@
 function [ Y ] = simulate_data( t, p, sigma )
     
-    m1 = 2;
+    m1 = 0;
     m2 = 2;
     b = 2;
     Y = zeros(t,p);

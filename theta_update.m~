@@ -41,7 +41,7 @@ for i = 1:p
         A = bigLinv*vec(Y*omega) - a * bigLinv*vec(Y*omega);
         diff_A = - diff_a * bigLinv * vec(Y*omega) - bigLinv^(2)*diff_bigL*vec(Y*omega) + a * bigLinv^(2)*diff_bigL*vec(Y*omega);
 
-        grad(i,k) = 2 * A' * diff_A / (A'*A);
+        grad(i,k) = 2 * A' * diff_A / norm;
         
     end
 end

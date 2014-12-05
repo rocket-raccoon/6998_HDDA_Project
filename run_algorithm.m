@@ -3,7 +3,7 @@ function [ omega, theta, final_res ] = run_algorithm(file_path, lambda)
     %Get the Y matrix and associated dimensions
     %Y = csvread(file_path, 1,1, [1 1 5 10]);
     %Y = csvread(file_path, 1, 1, [1 1 10 40]);
-    Y = simulate_data(100, 1, 100);
+    Y = simulate_data(5, 10, 1);
     [n, p] = size(Y);
     
     %Initialize guesses for parameters
@@ -57,7 +57,6 @@ function [ omega, theta, final_res ] = run_algorithm(file_path, lambda)
         %'update omega'
         
         %Update theta
-        eta = .01;
         theta_new = theta_update(theta, bigL, bigM, Y, omega_new, eta);
         theta_new = project_to_unit_box(theta_new);
         'updated theta'
@@ -83,8 +82,9 @@ function [ omega, theta, final_res ] = run_algorithm(file_path, lambda)
     
     plot(obj_vals)
     
-    [Ynew_lb, Ynew, Ynew_ub] = forecast_time_series(omega, theta, Y, 100, .10, final_res);
-    plot([Y; Ynew])
+    predictions = forecast_time_series(omega, theta, Y, 2, .10, final_res);
+    size(predictions)
+    plot([Y; predictions'])
     
 end
 
