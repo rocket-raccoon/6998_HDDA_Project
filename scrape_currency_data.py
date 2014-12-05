@@ -17,6 +17,7 @@ class currency_scraper():
     def initialize_browser(self):
         fp = webdriver.FirefoxProfile()
         driver = webdriver.PhantomJS()
+        #driver = webdriver.Firefox()
         self.driver = driver
     
     #Set the dates we want to scrape currency data for
@@ -61,6 +62,7 @@ class currency_scraper():
         data = []
         driver = self.driver
         for date in self.dates:
+            print date
             driver.get(self.url%(date))
             html = driver.page_source            
             cur_data = parse_currency_from_html(html)
@@ -83,13 +85,13 @@ if __name__ == "__main__":
     scraper = currency_scraper()
     try:
         scraper.initialize_browser()
-        scraper.set_date_intervals("2014-09-01", "2014-09-20", 20)
+        scraper.set_date_intervals("2000-09-01", "2014-09-20", 20)
         scraper.scrape_currency_data()
     except:
         raise "Scraper failed to complete"
     if scraper.driver:
         scraper.driver.quit()
-    scraper.output_to_csv("currency_data.csv")
+    scraper.output_to_csv("currency_data2.csv")
     
 
 

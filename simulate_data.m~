@@ -1,0 +1,9 @@
+function [ output_args ] = simulate_data( t, p )
+    
+    m = 2;
+    b = 2;
+    Y = zeros
+
+
+end
+
