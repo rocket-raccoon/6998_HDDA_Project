@@ -44,8 +44,6 @@ function [P] = forecast_time_series(omega, theta, Y, q, a, res)
        %L2(q*(i-1)+1:q*i, q*(i-1)+1:q*i) = L2i;
     end
     
-    size(vec2mat(P,q))
-    size(omega)
     P = inv(omega)*vec2mat(P,q);
     
     %Forecast the data out for q time points into the future

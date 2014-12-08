@@ -13,9 +13,6 @@ itr_values = setdiff([1:sqrt(p)^2], [1:sqrt(p)+1:sqrt(p)^2]);
 keep_itr = true;
 while keep_itr,
     new_x = x;
-    'asdf'
-    obj_val = norm(A*vec(new_x)-b,'fro')+lambda*norm(vec(new_x),1)
-    vec2mat(new_x, sqrt(p));
     %for j = 1:p
     for j = itr_values,
         %Calculate the residual
@@ -45,7 +42,6 @@ while keep_itr,
     x = new_x;
     obj_val = .5*(norm(b-A*x)^2) + lambda*norm(x, 1);
 end
-x
 
 end
 
