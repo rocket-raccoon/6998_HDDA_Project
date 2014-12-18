@@ -1,10 +1,11 @@
-function [P] = forecast_time_series(omega, theta, Y, q, a, res)
+function [P,VP] = forecast_time_series(omega, theta, Y, q, lambda)
     
     %Get dimensions from observed time series Y
     [n,p] = size(Y);
     
     %Initialize P
     P = zeros(q*p,1);
+    VP= zeros(q*p,1);
     
     %Create M1 and M2
     littleM = create_littleM(n+q);
@@ -24,10 +25,16 @@ function [P] = forecast_time_series(omega, theta, Y, q, a, res)
     L1 = zeros(n*p, n*p);
     L21 = zeros(q*p, n*p);
     L2 = zeros(q*p, q*p);
+    
+    %vega
+    vega=abs(n-p)
+    
     for i = 1:p,
+        
        %Grab the current alpha and beta
        alpha = theta(i,1);
        beta = theta(i,2);
+       
        %Create the ith components of the L1,L21,L2 matrices
        Li = create_littleL(alpha, beta, n+q);
        L1i = Li(1:n,1:n);
@@ -38,25 +45,18 @@ function [P] = forecast_time_series(omega, theta, Y, q, a, res)
        pi = littleM2*psi(:,i) + L21i*ei;
        P((i-1)*q+1:i*q, 1) = pi;
        
-       %Insert the ith components into the larger L1,L21,L2 matrices
-       %L1(n*(i-1)+1:n*i, n*(i-1)+1:n*i) = L1i;
-       %L21(q*(i-1)+1:q*i, n*(i-1)+1:n*i) = L21i;
-       %L2(q*(i-1)+1:q*i, q*(i-1)+1:q*i) = L2i;
+       zi=inv(L1i)*Y(:,i)
+       Xi=inv(L1i)*littleM1
+       psii=psi(:,i)
+       Vpi=(((zi-Xi*psii)'*(zi-Xi*psii))/(vega-2))*(L2i)*(L2i)'
+       covY=cov(Y)
+       
+       size((Vpi-covY*(omega-eye(p)))*(inv(omega.*omega)))
+       (Vpi-covY*(omega-eye(p)))*(inv(omega.*omega))
     end
-    
-    P = inv(omega)*vec2mat(P,q);
-    
-    %Forecast the data out for q time points into the future
-    %vec_Ynew = inv(kron(omega, eye(q)))*(M2*vec(psi) + L21*inv(L1)*(vec(Y)-M1*vec(psi)));
-    %Ynew = vec2mat(vec_Ynew', p);
-    
-    %Get the confidence interval (lower bound and right bound)
-    %[lb, ub] = get_bounds(res, a, p, q);
-    
-    %vec_Ynew_lb = inv(kron(omega, eye(q)))*(M2*vec(psi) + L21*inv(L1)*(vec(Y)-M1*vec(psi)) + L2*vec(lb));
-    %Ynew_lb = vec2mat(vec_Ynew_lb', p);
-    %vec_Ynew_ub = inv(kron(omega, eye(q)))*(M2*vec(psi) + L21*inv(L1)*(vec(Y)-M1*vec(psi)) + L2*vec(ub));
-    %Ynew_ub = vec2mat(vec_Ynew_ub', p);
+   
+    VP= vec2mat(VP,q)
+    P = (vec2mat(P,q));
     
 end
 

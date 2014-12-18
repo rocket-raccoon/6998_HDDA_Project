@@ -8,6 +8,8 @@ for i = set_to_one,
    x(i)=1; 
 end
 itr_values = setdiff([1:sqrt(p)^2], [1:sqrt(p)+1:sqrt(p)^2]);
+iter = 0;
+maxIters = 100;
 
 %Iterate until convergence
 keep_itr = true;
@@ -33,10 +35,10 @@ while keep_itr,
            new_x(j) = 0;
         end
         %Save update weight vector and objective value
-        obj_val = .5*(norm(b-A*new_x)^2) + lambda*norm(new_x, 1);
+        obj_val = .5*(norm(b-A*new_x)^2) + lambda*norm(new_x, 1)
     end
     %Check whether or not to keep iterating
-    if norm(x - new_x) <= epsilon
+    if norm(x - new_x,'fro') <= epsilon
        keep_itr = false; 
     end
     x = new_x;

@@ -1,0 +1,6 @@
+Y=load_stock_data()
+sizeM=size(Y)
+for i = 1:sizeM(2)
+colsum = sum(S( :i,));
+Y( : i,) = Y(:i,)*1/colsum;
+end
