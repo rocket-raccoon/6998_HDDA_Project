@@ -29,7 +29,6 @@ function [omega, theta, final_res, obj_vals, times] = test2(Y, lambda, simulateD
         [bigL, bigM, psi, A, b] = get_matrices(theta_new, omega, n, p, Y);
         obj_val1 = norm(A*vec(omega)-b,'fro')
         
-        %Ensure direction isn't going crazy after theta update
         if exist('obj_val2','var')==1 && abs(obj_val2-obj_val1)>obj_val2,
             break;
         else
@@ -41,8 +40,6 @@ function [omega, theta, final_res, obj_vals, times] = test2(Y, lambda, simulateD
         %Iterate on omega until convergence
         omega_new = update_omega(A,b,lambda);
         obj_val2 = norm(A*vec(omega_new)-b,'fro')
-        
-        %Ensure direction isn't going crazy after omega update
         if abs(obj_val2-obj_val1)>obj_val1,
             break;
         else,
@@ -68,6 +65,14 @@ function [omega, theta, final_res, obj_vals, times] = test2(Y, lambda, simulateD
         theta = theta_new;
         lambda = lambda * 10
         
+        %predictions = forecast_time_series(omega, theta, Y*omega, 10, .10, final_res,lambda);
+        %times = [Y; predictions'];
+        %figure
+        %plot(times)
+
+        %figure
+        %plot(obj_vals)
+        
     end
     
     %Plot predictions
@@ -90,6 +95,17 @@ function [omega, theta, final_res, obj_vals, times] = test2(Y, lambda, simulateD
 
     figure
     errorbar_groups(predictions'/omega,((2*eye(p)-abs(omega))*sqrt(var(Y)'))');
+
+    %figure
+    %errorbar_groups(predictions',sqrt(var(Y*omega)));
+    %errorbar_groups(predictions',predictions'-quantile(Y,0.1),predictions'+quantile(Y,0.90));
+
     
+    %figure
+    %plot(Y)
+
+   % figure
+   % Yfinal=Y*omega
+    %plot(Yfinal)
 end
 
