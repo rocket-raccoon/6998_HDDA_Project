@@ -1,4 +1,4 @@
-function [P,VP] = forecast_time_series(omega, theta, Y, q, lambda)
+function [P] = forecast_time_series(omega, theta, Y, q, lambda)
     
     %Get dimensions from observed time series Y
     [n,p] = size(Y);
@@ -27,7 +27,7 @@ function [P,VP] = forecast_time_series(omega, theta, Y, q, lambda)
     L2 = zeros(q*p, q*p);
     
     %vega
-    vega=abs(n-p)
+    vega=abs(n-p);
     
     for i = 1:p,
         
@@ -45,17 +45,8 @@ function [P,VP] = forecast_time_series(omega, theta, Y, q, lambda)
        pi = littleM2*psi(:,i) + L21i*ei;
        P((i-1)*q+1:i*q, 1) = pi;
        
-       zi=inv(L1i)*Y(:,i)
-       Xi=inv(L1i)*littleM1
-       psii=psi(:,i)
-       Vpi=(((zi-Xi*psii)'*(zi-Xi*psii))/(vega-2))*(L2i)*(L2i)'
-       covY=cov(Y)
-       
-       size((Vpi-covY*(omega-eye(p)))*(inv(omega.*omega)))
-       (Vpi-covY*(omega-eye(p)))*(inv(omega.*omega))
     end
-   
-    VP= vec2mat(VP,q)
+    
     P = (vec2mat(P,q));
     
 end
