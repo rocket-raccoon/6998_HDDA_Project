@@ -12,7 +12,7 @@ function [ theta ] = theta_update( theta, omega, Y, eta, epsilon )
         %Take a gradient step in theta
         [bigL, bigM, psi, A, b] = get_matrices(theta, omega, n, p, Y);
         theta_new = theta_step(theta, bigL, bigM, Y, omega, eta);
-        theta_new = project_to_unit_box(theta_new)
+        theta_new = project_to_unit_box(theta_new);
         
         %Check for convergence
         iters = iters + 1;
